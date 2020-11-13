@@ -1,0 +1,25 @@
+**************** Create Function
+
+aws lambda create-function --function-name CreateThumbnail \
+--zip-file fileb://my-deployment-package.zip --handler lambda_function.lambda_handler --runtime python3.7 \
+--timeout 10 --memory-size 1024 \
+--role <s3 role arn>
+
+
+**************** Update Function Code
+
+zip -g my-deployment-package.zip lambda_function.py
+aws lambda update-function-code --function-name CreateThumbnail --zip-file fileb://my-deployment-package.zip
+
+
+***************** Package Python Function
+
+virtualenv myenv
+source myenv/bin/activate
+pip install Pillow
+pip show Pillow
+deactivate
+cd myenv/lib/python3.7/site-packages
+zip -r my-deployment-package.zip .
+mv my-deployment-package ~/environment
+zip -g my-deployment-package.zip lambda_function.py
